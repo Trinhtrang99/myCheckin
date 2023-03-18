@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">My Checkin</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title">Đăng nhập</string>
+    <string name="phone_hint">Số điện thoại</string>
+    <string name="password_hint">Mật khẩu</string>
+    <string name="forgot_password">Quên mật khẩu?</string>
+    <string name="btn_login">Đăng nhập</string>
+    <string name="title_add_employee">Thêm Nhân Viên</string>
+    <string name="name_field">Họ tên</string>
+    <string name="birth_day">Ngày Sinh</string>
+    <string name="select_birthday">Chọn ngày sinh</string>
+    <string name="email_field">Email</string>
+    <string name="phone_number_field">Số điện thoại</string>
+    <string name="position_filed">Chức vụ</string>
+    <string name="password_field">Mật khẩu</string>
+    <string name="confirm_pw_feild">Xác nhận mật khẩu</string>
+</resources>

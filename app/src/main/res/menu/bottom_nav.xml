@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_ai_scope"
+        android:icon="@drawable/ic_baseline_supervisor_account_24"
+        android:title="" />
+
+    <item
+        android:id="@+id/navigation_inspection_results_top"
+        android:icon="@drawable/ic_manager"
+        android:title="" />
+
+    <item
+        android:id="@+id/navigation_diary"
+        android:icon="@drawable/ic_baseline_person_2"
+        android:title="" />
+</menu>
