@@ -77,6 +77,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rootChangePass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp">
@@ -106,6 +107,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/root_logout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp">

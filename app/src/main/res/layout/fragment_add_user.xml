@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -60,7 +60,7 @@
                 android:background="@drawable/border_radius_10dp">
 
                 <EditText
-                    android:id="@+id/edtCardNumber"
+                    android:id="@+id/edtName"
                     android:layout_width="match_parent"
                     android:layout_height="57dp"
                     android:layout_centerInParent="true"
@@ -68,7 +68,7 @@
                     android:layout_marginTop="4dp"
                     android:backgroundTint="@color/white"
                     android:hint="@string/name_field"
-                    android:inputType="numberPassword"
+                    android:inputType="text"
                     android:maxLength="19"
                     android:singleLine="true"
                     android:textColor="@color/black"
@@ -98,7 +98,7 @@
                     android:layout_height="wrap_content">
 
                     <EditText
-                        android:id="@+id/edtExpiration"
+                        android:id="@+id/edtBirthday"
                         android:layout_width="match_parent"
                         android:layout_height="57dp"
                         android:layout_centerInParent="true"
@@ -235,7 +235,7 @@
                     android:layout_marginTop="4dp"
                     android:backgroundTint="@color/white"
                     android:hint="@string/email_field"
-                    android:inputType="textCapSentences"
+                    android:inputType="textEmailAddress"
                     android:maxLength="255"
                     android:singleLine="true"
                     android:textColor="@color/black"
@@ -292,7 +292,7 @@
                     android:layout_marginTop="4dp"
                     android:backgroundTint="@color/white"
                     android:hint="@string/phone_number_field"
-                    android:inputType="textCapSentences"
+                    android:inputType="phone"
                     android:maxLength="255"
                     android:singleLine="true"
                     android:textColor="@color/black"

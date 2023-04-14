@@ -10,13 +10,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.mycheckin.DelayUtils;
+import com.example.mycheckin.HomeEmployeeFragment;
 import com.example.mycheckin.R;
 import com.example.mycheckin.databinding.ActivityMainAdminBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainAdmin extends AppCompatActivity {
     ActivityMainAdminBinding binding;
-    private ListUserFragment fragmentListUser;
+    private HomeEmployeeFragment fragmentListUser;
+    //private ListUserFragment li;
     private ManagerCheckin fragmentManagerCheckin;
     private ProfileFragment profileFragment;
     public BottomNavigationView navigation;
@@ -55,7 +57,7 @@ public class MainAdmin extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void initFragment() {
-        fragmentListUser = new ListUserFragment();
+        fragmentListUser = new HomeEmployeeFragment();
         fragmentManagerCheckin = new ManagerCheckin();
         profileFragment = new ProfileFragment();
     }
