@@ -1,6 +1,12 @@
 package com.example.mycheckin.model;
 
+import java.util.Objects;
+
 public class Checkin {
+    public Checkin filterDate(Checkin checkin, String date){
+        if (Objects.equals(checkin.date, date)) return checkin;
+        return null;
+    }
     private String date, nameUser, timeCheckIn, timeCheckout, email;
     private int type, status;
 

@@ -2,6 +2,7 @@ package com.example.mycheckin;
 
 import static com.example.mycheckin.model.Common.CHECK_IN;
 import static com.example.mycheckin.model.Common.EMAIL;
+import static com.example.mycheckin.model.Common.EVALUATE;
 import static com.example.mycheckin.model.Common.IS_CHECKOUT;
 import static com.example.mycheckin.model.Common.IS_CHECK_IN;
 import static com.example.mycheckin.model.Common.USER;
@@ -28,8 +29,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 
+import com.example.mycheckin.base.BaseFragment;
 import com.example.mycheckin.databinding.FragmentHomeEmployeeBinding;
 import com.example.mycheckin.model.Checkin;
 import com.example.mycheckin.utils.SharedUtils;
@@ -39,6 +40,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -56,7 +58,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-public class HomeEmployeeFragment extends Fragment {
+public class HomeEmployeeFragment extends BaseFragment {
 
     FragmentHomeEmployeeBinding binding;
     int PERMISSION_ID = 44;
@@ -70,6 +72,8 @@ public class HomeEmployeeFragment extends Fragment {
     String email = "";
     Date time;
     String day;
+    int late = 0;
+    int onTime = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,7 +96,10 @@ public class HomeEmployeeFragment extends Fragment {
 
         time = new java.util.Date(System.currentTimeMillis());
         day = new SimpleDateFormat("dd-MM-yyyy").format(time);
-        myRef.child(email.replace(".","")).child(CHECK_IN).child(day).addValueEventListener(new ValueEventListener() {
+
+
+
+        myRef.child(email.replace(".", "")).child(CHECK_IN).child(day).addValueEventListener(new ValueEventListener() {
             @SuppressLint("SimpleDateFormat")
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -104,17 +111,18 @@ public class HomeEmployeeFragment extends Fragment {
                             binding.tvCheckin.setVisibility(View.GONE);
                             binding.timeCheckin.setVisibility(View.VISIBLE);
                         } else {
-                            binding.tvCheckout.setVisibility(View.VISIBLE);
-                            binding.tvCheckout.setText(usersModel.getTimeCheckout());
-                            binding.tvTimeCheckout.setVisibility(View.GONE);
+                            binding.timeCheckin.setVisibility(View.GONE);
+                            binding.tvCheckin.setVisibility(View.VISIBLE);
+                            binding.tvCheckin.setText(usersModel.getTimeCheckout());
                         }
                         if (!SharedUtils.getBoolean(requireContext(), IS_CHECKOUT, false)) {
                             binding.tvCheckout.setVisibility(View.GONE);
                             binding.tvTimeCheckout.setVisibility(View.VISIBLE);
                         } else {
-                            binding.tvCheckin.setVisibility(View.VISIBLE);
-                            binding.tvCheckin.setText(usersModel.getTimeCheckIn());
-                            binding.timeCheckin.setVisibility(View.GONE);
+
+                            binding.tvTimeCheckout.setVisibility(View.GONE);
+                            binding.tvCheckout.setVisibility(View.VISIBLE);
+                            binding.tvCheckout.setText(usersModel.getTimeCheckIn());
                         }
 
 
@@ -138,11 +146,12 @@ public class HomeEmployeeFragment extends Fragment {
 
 
         binding.btnCheckin.setOnClickListener(view1 -> {
-
+            showProgressDialog(true);
             addDataToFirebase(true);
             SharedUtils.saveBoolean(requireContext(), IS_CHECK_IN, true);
         });
         binding.btnCheckout.setOnClickListener(view12 -> {
+            showProgressDialog(true);
             SharedUtils.saveBoolean(requireContext(), IS_CHECKOUT, true);
             addDataToFirebase(false);
         });
@@ -278,6 +287,8 @@ public class HomeEmployeeFragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void addDataToFirebase(Boolean isCheckIn) {
+
+
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         DateTimeFormatter dtfTime = DateTimeFormatter.ofPattern("HH:mm");
         LocalDateTime now = LocalDateTime.now();
@@ -296,7 +307,10 @@ public class HomeEmployeeFragment extends Fragment {
                 // đi làm muộn || đi về sớm
                 status = 1;
                 type = 1;// đi làm muộn hoặc về sớm
+
+
             } else {
+
                 status = 0;
             }
 
@@ -338,16 +352,22 @@ public class HomeEmployeeFragment extends Fragment {
                         type = 0;
                     }
                 }
-                myRef.child("/" + email.replace(".", "") + "/checkIn/" + day + "/timeCheckout").setValue(time2);
-                myRef.child("/" + email.replace(".", "") + "/checkIn/" + day + "/type").setValue(type);
-                myRef.child("/" + email.replace(".", "") + "/checkIn/" + day + "/status").setValue(status);
+                String link = "/" + email.replace(".", "") + "/checkIn/" + day;
+                myRef.child(link + "/timeCheckout").setValue(time2);
+                myRef.child(link + "/type").setValue(type);
+                myRef.child(link + "/status").setValue(status);
 
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
-
+            if (status == 0 && type == 0) {
+                db.collection(EVALUATE).document(email).update("onTime", onTime + 1);
+            } else {
+                db.collection(EVALUATE).document(email).update("late", late + 1);
+            }
         }
 
+        showProgressDialog(false);
     }
 }
 

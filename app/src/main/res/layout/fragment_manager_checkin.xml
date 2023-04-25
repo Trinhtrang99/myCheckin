@@ -37,6 +37,7 @@
             android:layout_marginRight="20dp">
 
             <CalendarView
+                android:scrollbars="none"
                 android:id="@+id/calendar"
                 android:layout_width="match_parent"
                 android:layout_height="310dp"

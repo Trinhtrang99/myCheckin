@@ -36,9 +36,11 @@ public class ListUserAdapter extends RecyclerView.Adapter<ListUserAdapter.ListUs
         holder.binding.getRoot().setOnClickListener(v -> {
             iClick.clickEmployee(list.get(position), position);
         });
+        holder.binding.txtName.setText(list.get(position).getName());
     }
 
     public void updateList(List<User> userList) {
+   //     this.list.clear();
         this.list = userList;
         notifyDataSetChanged();
     }
