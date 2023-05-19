@@ -2,14 +2,12 @@ package com.example.mycheckin.admin;
 
 import static com.example.mycheckin.model.Common.USER;
 
+import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CalendarView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,14 +28,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Objects;
 
 
 public class ManagerCheckin extends Fragment {
 
 
     FragmentManagerCheckinBinding binding;
-
+    String date;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,12 +53,52 @@ public class ManagerCheckin extends Fragment {
         int day1 = c.get(Calendar.DAY_OF_MONTH);
         int month1 = c.get(Calendar.MONTH);
         int year1 = c.get(Calendar.YEAR);
-        String date = day1 + "-" + (month1 + 1) + "-" + year1;
+
+        String dateTemp = "";
+        if (day1 > 10) {
+            dateTemp = day1 + "";
+        } else {
+            dateTemp = "0" + day1;
+        }
+        if (month1 + 1 > 10) {
+            date = dateTemp + "-" + (month1 + 1) + "-" + year1;
+        } else {
+            date = dateTemp + "-" + "0" + (month1 + 1) + "-" + year1;
+        }
+
         getData(date);
         binding.calendar.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            String date1 = dayOfMonth + "-" + (month + 1) + "-" + year;
-            getData(date1);
+            String date1;
+            String monthTemp = "";
+            String dateTemp1 = "";
+            if (month + 1 > 10) {
+                monthTemp = month + 1 + "";
+            } else {
+                monthTemp = "0" + (month + 1);
+            }
+            if (dayOfMonth > 10) {
+                dateTemp1 = dayOfMonth + "";
+            } else {
+                dateTemp1 = "0" + dayOfMonth;
+            }
+
+            date = dateTemp1 + "-" + monthTemp + "-" + year;
+
+
+            getData(date);
         });
+        //binding.pieView.selectedPie(3);
+
+        binding.pieView.setOnPieClickListener(index -> {
+            if (index != PieView.NO_SELECTED_INDEX) {
+                Intent intent = new Intent(getActivity(), ListnVActivity.class);
+                intent.putExtra("key", index);
+                intent.putExtra("date", date);
+                startActivity(intent);
+            }
+
+        });
+
         return binding.getRoot();
     }
 
@@ -69,95 +106,56 @@ public class ManagerCheckin extends Fragment {
     DatabaseReference myRef;
     List<Checkin> list;
     int status = 0;
-    ArrayList<PieHelper> pieHelperArrayList = new ArrayList<PieHelper>();
+    int wrongAddress = 0;
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         database = FirebaseDatabase.getInstance();
+        status = 0;
+        wrongAddress = 0;
         list = new ArrayList<>();
-        //   DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-
-
-
-    }
-
-    private void randomSet(PieView pieView) {
-        ArrayList<PieHelper> pieHelperArrayList = new ArrayList<PieHelper>();
-        ArrayList<Integer> intList = new ArrayList<Integer>();
-        int totalNum = (int) (5 * Math.random()) + 5;
-
-        int totalInt = 0;
-        for (int i = 0; i < totalNum; i++) {
-            int ranInt = (int) (Math.random() * 10) + 1;
-            intList.add(ranInt);
-            totalInt += ranInt;
-        }
-        for (int i = 0; i < totalNum; i++) {
-            pieHelperArrayList.add(new PieHelper(100f * intList.get(i) / totalInt));
-        }
-
-        pieView.selectedPie(PieView.NO_SELECTED_INDEX);
-        pieView.showPercentLabel(true);
-        pieView.setDate(pieHelperArrayList);
-    }
-
-    private void set(PieView pieView) {
-
-        pieHelperArrayList.add(new PieHelper(20, Color.BLACK));
-        pieHelperArrayList.add(new PieHelper(6));
-        pieHelperArrayList.add(new PieHelper(30));
-        pieHelperArrayList.add(new PieHelper(12));
-        pieHelperArrayList.add(new PieHelper(32));
 
 
     }
+
 
     private void getData(String data) {
+        status = 0;
+        wrongAddress = 0;
+        List<Checkin> listCheckin = new ArrayList<>();
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+                List<String> list1 = new ArrayList<>();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    String key = dataSnapshot.getKey();
-                    myRef.child(key).child("checkIn").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot1) {
-
-                            for (DataSnapshot dataSnapshot1 : snapshot1.getChildren()) {
-                                Checkin usersModel = dataSnapshot1.getValue(Checkin.class);
-                                list.add(new Checkin().filterDate(usersModel, data));
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                    list.removeIf(Objects::isNull);
-                                }
-                                if (usersModel.getStatus() == 1) {
-                                    status++;
-                                }
-                            }
-                            System.out.println(list.toString());
-                            //
-                            float persen = (status) / 10;
-                            pieHelperArrayList.add(new PieHelper(20));
-                            pieHelperArrayList.add(new PieHelper(100 - 20));
-                            binding.pieView.setDate(pieHelperArrayList);
-                            binding.pieView.setOnPieClickListener(index -> {
-                                if (index != PieView.NO_SELECTED_INDEX) {
-                                    //    textView.setText(index + " selected");
-                                } else {
-                                    //      textView.setText("No selected pie");
-                                }
-                            });
-                            binding.pieView.selectedPie(2);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            System.out.println("s" + error.getDetails());
-                        }
-                    });
-
-
+                    list1.add(dataSnapshot.getKey());
                 }
+
+                for (String i : list1) {
+                    Checkin checkin = snapshot.child(i).child("checkIn").child(data).getValue(Checkin.class);
+                    if (checkin != null) {
+                        if (checkin.getStatus() == 1) {
+                            status++;
+                        }
+                        if (!checkin.isWrongAddress()) {
+                            wrongAddress++;
+                        }
+                        listCheckin.add(checkin);
+
+                    }
+                }
+                float persen = (float) (status) / list1.size();
+                float percentWrong = (float) (wrongAddress) / list1.size();
+                float p0 = persen * 100;
+                float p1 = percentWrong * 100;
+                float p3 = 100 - (p0 + p1);
+                ArrayList<PieHelper> pieHelperArrayList = new ArrayList<>();
+                pieHelperArrayList.add(new PieHelper(p0, Color.RED));
+                pieHelperArrayList.add(new PieHelper(p1, Color.GRAY));
+                pieHelperArrayList.add(new PieHelper(p3));
+                binding.pieView.setDate(pieHelperArrayList);
 
             }
 
@@ -167,5 +165,7 @@ public class ManagerCheckin extends Fragment {
 
             }
         });
+
     }
+
 }

@@ -3,12 +3,31 @@ package com.example.mycheckin.model;
 import java.util.Objects;
 
 public class Checkin {
-    public Checkin filterDate(Checkin checkin, String date){
+    public Checkin filterDate(Checkin checkin, String date) {
         if (Objects.equals(checkin.date, date)) return checkin;
         return null;
     }
+
     private String date, nameUser, timeCheckIn, timeCheckout, email;
     private int type, status;
+
+    private boolean isWrongAddress;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isWrongAddress() {
+        return isWrongAddress;
+    }
+
+    public void setWrongAddress(boolean wrongAddress) {
+        isWrongAddress = wrongAddress;
+    }
 
     public String getDate() {
         return date;
@@ -69,7 +88,7 @@ public class Checkin {
     public Checkin() {
     }
 
-    public Checkin(String date, String nameUser, String timeCheckIn, String timeCheckout, String email, int type, int status) {
+    public Checkin(String date, String nameUser, String timeCheckIn, String timeCheckout, String email, int type, int status, boolean isWrongAddress) {
         this.date = date;
         this.nameUser = nameUser;
         this.timeCheckIn = timeCheckIn;
@@ -77,5 +96,6 @@ public class Checkin {
         this.email = email;
         this.type = type;
         this.status = status;
+        this.isWrongAddress = isWrongAddress;
     }
 }

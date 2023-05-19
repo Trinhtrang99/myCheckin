@@ -2,6 +2,7 @@ package com.example.mycheckin;
 
 import static com.example.mycheckin.model.Common.USER;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.ArrayAdapter;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.mycheckin.base.BaseFragment;
 import com.example.mycheckin.databinding.FragmentAddUserBinding;
@@ -21,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +36,7 @@ public class AddUserFragment extends BaseFragment {
     private DatabaseReference myRef;
 
     FirebaseDatabase database;
+
 
 
     public AddUserFragment() {
@@ -58,6 +62,18 @@ public class AddUserFragment extends BaseFragment {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_user, container, false);
         db = FirebaseFirestore.getInstance();
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        binding.edtCvv.setOnClickListener(v -> {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(),
+                    (datePicker, year1, month1, day) -> {
+                        binding.edtCvv.setText(day + "-" + (month1 + 1) + "-" + year1);
+                    }, year, month, dayOfMonth);
+            datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+            datePickerDialog.show();
+        });
 
         ArrayAdapter ad
                 = new ArrayAdapter(
@@ -70,7 +86,7 @@ public class AddUserFragment extends BaseFragment {
         binding.spinner1.setAdapter(ad);
 
         binding.btnadd.setOnClickListener(view -> {
-          //  showProgressDialog(true);
+            showProgressDialog(true);
             String email = binding.edtHolderName.getText().toString().trim();
             String password = binding.edtPassword.getText().toString().trim();
 
@@ -86,6 +102,9 @@ public class AddUserFragment extends BaseFragment {
                     .addOnFailureListener(requireActivity(), e -> {
                         System.out.println("fail" + e.getCause());
                     });
+            showProgressDialog(true);
+            FragmentManager fm = getFragmentManager();
+            fm.popBackStack();
         });
 
         return binding.getRoot();
@@ -96,27 +115,21 @@ public class AddUserFragment extends BaseFragment {
     private void addDataToFirebase() {
 
         UsersModel user = new UsersModel();
-        user.setBirthday(binding.edtBirthday.getText().toString());
+        user.setBirthday(binding.edtCvv.getText().toString());
         user.setEmaul(binding.edtHolderName.getText().toString());
         user.setName(binding.edtName.getText().toString());
         user.setPhone(binding.edtST.getText().toString());
-        user.setPosition("kế toán");
+        user.setPosition(binding.spinner1.toString());
+
         //   user.setCheckin(new Checkin());
         String email = binding.edtHolderName.getText().toString().replace(".", "");
         myRef.child(email).setValue(user).addOnCompleteListener(task -> {
-                    System.out.println("Done");
+                    System.out.println("Thêm nhân viên thành công");
                 })
                 .addOnFailureListener(e -> {
                     System.out.println("Fail");
 
                 });
-
-        Map<String, Integer> numberMapping = new HashMap<>();
-        numberMapping.put("late", 0);
-        numberMapping.put("onTime", 0);
-        db.collection("evaluate").document(email).set(numberMapping);
-
-    //    showProgressDialog(false);
 
 
     }

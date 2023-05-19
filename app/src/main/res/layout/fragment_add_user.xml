@@ -9,7 +9,8 @@
             android:id="@+id/lnCreditCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/white">
 
 
             <TextView
@@ -17,12 +18,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/title_add_employee"
                 android:textColor="@color/black"
-                android:textFontWeight="400"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textFontWeight="700"
+                android:textSize="18sp"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -47,7 +47,7 @@
                     android:text="*"
                     android:textColor="@color/red"
                     android:textSize="18sp"
-                    android:visibility="invisible" />
+                    android:visibility="visible" />
             </LinearLayout>
 
 
@@ -62,14 +62,14 @@
                 <EditText
                     android:id="@+id/edtName"
                     android:layout_width="match_parent"
-                    android:layout_height="57dp"
+                    android:layout_height="50dp"
                     android:layout_centerInParent="true"
                     android:layout_marginHorizontal="19dp"
                     android:layout_marginTop="4dp"
                     android:backgroundTint="@color/white"
                     android:hint="@string/name_field"
                     android:inputType="text"
-                    android:maxLength="19"
+                    android:maxLength="50"
                     android:singleLine="true"
                     android:textColor="@color/black"
                     android:textFontWeight="400"
@@ -85,7 +85,7 @@
                 android:visibility="invisible" />
 
             <RelativeLayout
-                android:layout_width="match_parent"
+                android:layout_width="320dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvName"
                 android:layout_marginHorizontal="25dp"
@@ -93,28 +93,6 @@
                 android:background="@drawable/border_radius_10dp"
                 android:visibility="gone">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/edtBirthday"
-                        android:layout_width="match_parent"
-                        android:layout_height="57dp"
-                        android:layout_centerInParent="true"
-                        android:layout_marginStart="19dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginEnd="18dp"
-                        android:backgroundTint="@color/white"
-                        android:hint="MM\YY"
-                        android:maxLength="255"
-                        android:singleLine="true"
-                        android:textColor="@color/black"
-                        android:textFontWeight="400"
-                        android:textSize="16sp" />
-
-
-                </RelativeLayout>
 
             </RelativeLayout>
 
@@ -133,7 +111,7 @@
                 android:layout_marginTop="5dp">
 
                 <TextView
-                    android:id="@+id/tvPass"
+                    android:id="@+id/tvngaysinh"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
@@ -153,26 +131,27 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:id="@+id/panel_birtday"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvName"
-                android:layout_marginHorizontal="25dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/border_radius_10dp">
+                >
 
                 <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="25dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/border_radius_10dp">
 
-                    <EditText
+                    <TextView
                         android:id="@+id/edtCvv"
-                        android:layout_width="match_parent"
-                        android:layout_height="57dp"
+                        android:layout_width="320dp"
+                        android:layout_height="50dp"
                         android:layout_centerInParent="true"
                         android:layout_marginStart="19dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginEnd="18dp"
-                        android:backgroundTint="@color/white"
                         android:gravity="center_vertical"
                         android:hint="@string/select_birthday"
                         android:singleLine="true"
@@ -180,10 +159,16 @@
                         android:textFontWeight="400"
                         android:textSize="16sp" />
 
-
                 </RelativeLayout>
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="300dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/baseline_calendar_month_24"/>
 
             </RelativeLayout>
+
 
             <TextView
                 android:id="@+id/tvErrorCVV"
@@ -215,7 +200,7 @@
                     android:text="*"
                     android:textColor="@color/red"
                     android:textSize="18sp"
-                    android:visibility="invisible" />
+                    android:visibility="visible" />
             </LinearLayout>
 
             <RelativeLayout
@@ -229,7 +214,7 @@
                 <EditText
                     android:id="@+id/edtHolderName"
                     android:layout_width="match_parent"
-                    android:layout_height="57dp"
+                    android:layout_height="50dp"
                     android:layout_centerInParent="true"
                     android:layout_marginHorizontal="19dp"
                     android:layout_marginTop="4dp"
@@ -286,7 +271,7 @@
                 <EditText
                     android:id="@+id/edtSđt"
                     android:layout_width="match_parent"
-                    android:layout_height="57dp"
+                    android:layout_height="50dp"
                     android:layout_centerInParent="true"
                     android:layout_marginHorizontal="19dp"
                     android:layout_marginTop="4dp"
@@ -335,18 +320,18 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_below="@id/tvName"
                 android:layout_marginHorizontal="25dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/border_radius_10dp">
-
                 <Spinner
                     android:id="@+id/spinner1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:drawable/btn_dropdown"
-                    android:spinnerMode="dropdown" />
+                    android:layout_height="match_parent"
+                    android:spinnerMode="dropdown"/>
+
+
             </RelativeLayout>
 
             <TextView
@@ -379,7 +364,7 @@
                     android:text="*"
                     android:textColor="@color/red"
                     android:textSize="18sp"
-                    android:visibility="invisible" />
+                    android:visibility="visible" />
             </LinearLayout>
 
             <RelativeLayout
@@ -393,7 +378,7 @@
                 <EditText
                     android:id="@+id/edtPassword"
                     android:layout_width="match_parent"
-                    android:layout_height="57dp"
+                    android:layout_height="50dp"
                     android:layout_centerInParent="true"
                     android:layout_marginHorizontal="19dp"
                     android:layout_marginTop="4dp"
@@ -411,7 +396,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="23dp"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -429,7 +414,7 @@
                     android:text="*"
                     android:textColor="@color/red"
                     android:textSize="18sp"
-                    android:visibility="invisible" />
+                    android:visibility="visible" />
             </LinearLayout>
 
             <RelativeLayout
@@ -443,7 +428,7 @@
                 <EditText
                     android:id="@+id/edtconfirmpw"
                     android:layout_width="match_parent"
-                    android:layout_height="57dp"
+                    android:layout_height="50dp"
                     android:layout_centerInParent="true"
                     android:layout_marginHorizontal="19dp"
                     android:layout_marginTop="4dp"
@@ -463,8 +448,11 @@
                 android:layout_height="50dp"
                 android:layout_marginHorizontal="25dp"
                 android:layout_marginVertical="60dp"
-                android:text="Thêm nhân viên"
-                android:textAllCaps="false" />
+                android:text="THÊM NHÂN VIÊN"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textFontWeight="700"
+                android:background="#CD853F"/>
         </LinearLayout>
 
     </ScrollView>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".confirm_checkin">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/white"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/txt_conf_checkin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="Xác nhận check in"
+            android:textAllCaps="true"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_confirm_checkin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt_conf_checkin"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:text="Bạn có chắc chắc muốn check in?"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+
+        <RelativeLayout
+            android:id="@+id/panel_checkin"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_below="@+id/tv_confirm_checkin"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/orgain"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Có"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="14dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/btnCancel"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_below="@+id/tv_confirm_checkin"
+            android:layout_marginLeft="125dp"
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@+id/panel_checkin"
+            android:background="@color/grey"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Không"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="14dp" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

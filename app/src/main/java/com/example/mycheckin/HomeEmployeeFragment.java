@@ -8,6 +8,7 @@ import static com.example.mycheckin.model.Common.IS_CHECK_IN;
 import static com.example.mycheckin.model.Common.USER;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,6 +23,9 @@ import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,6 +37,8 @@ import androidx.databinding.DataBindingUtil;
 import com.example.mycheckin.base.BaseFragment;
 import com.example.mycheckin.databinding.FragmentHomeEmployeeBinding;
 import com.example.mycheckin.model.Checkin;
+import com.example.mycheckin.model.Common;
+import com.example.mycheckin.user.Commom;
 import com.example.mycheckin.utils.SharedUtils;
 import com.example.mycheckin.utils.WifiUtils;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -40,7 +46,6 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -69,11 +74,14 @@ public class HomeEmployeeFragment extends BaseFragment {
     private String TAG = "  DATA FIREBASE";
     FirebaseDatabase database;
     DatabaseReference myRef;
+    DatabaseReference myRef2;
     String email = "";
     Date time;
     String day;
     int late = 0;
     int onTime = 0;
+    Location locationHost;
+    Boolean wrong_address = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,18 +92,41 @@ public class HomeEmployeeFragment extends BaseFragment {
 
     FusedLocationProviderClient mFusedLocationClient;
 
+    @SuppressLint("SimpleDateFormat")
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        db = FirebaseFirestore.getInstance();
-        ipWifi = WifiUtils.getWifiIpAddress();
+
         email = SharedUtils.getString(requireContext(), EMAIL, "");
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference(USER);
-
+        db = FirebaseFirestore.getInstance();
         time = new java.util.Date(System.currentTimeMillis());
         day = new SimpleDateFormat("dd-MM-yyyy").format(time);
+        ipWifi = WifiUtils.getWifiIpAddress();
+        myRef2 = database.getReference("commom");
+
+        locationHost = new Location("");
+        myRef2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Commom common = snapshot.getValue(Commom.class);
+                locationHost.setLatitude(Double.parseDouble(common.getLat()));
+                locationHost.setLongitude(Double.parseDouble(common.getLog()));
+                localHost = common.getAddress();
+                ipWifi = common.getWifi_ip();
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
 
 
 
@@ -111,30 +142,32 @@ public class HomeEmployeeFragment extends BaseFragment {
                             binding.tvCheckin.setVisibility(View.GONE);
                             binding.timeCheckin.setVisibility(View.VISIBLE);
                         } else {
+                            binding.btnCheckin.setEnabled(false);
                             binding.timeCheckin.setVisibility(View.GONE);
                             binding.tvCheckin.setVisibility(View.VISIBLE);
-                            binding.tvCheckin.setText(usersModel.getTimeCheckout());
+                            binding.tvCheckin.setText(usersModel.getTimeCheckIn());
                         }
                         if (!SharedUtils.getBoolean(requireContext(), IS_CHECKOUT, false)) {
                             binding.tvCheckout.setVisibility(View.GONE);
                             binding.tvTimeCheckout.setVisibility(View.VISIBLE);
                         } else {
-
+                            binding.btnCheckout.setEnabled(false);
                             binding.tvTimeCheckout.setVisibility(View.GONE);
                             binding.tvCheckout.setVisibility(View.VISIBLE);
-                            binding.tvCheckout.setText(usersModel.getTimeCheckIn());
+                            binding.tvCheckout.setText(usersModel.getTimeCheckout());
                         }
 
 
                     } else {
-                        SharedUtils.saveBoolean(requireContext(), IS_CHECK_IN, false);
-                        SharedUtils.saveBoolean(requireContext(), IS_CHECKOUT, false);
+                        binding.btnCheckin.setEnabled(true);
+                        binding.btnCheckout.setEnabled(false);
                         binding.tvCheckout.setVisibility(View.GONE);
                         binding.tvTimeCheckout.setVisibility(View.VISIBLE);
                         binding.tvCheckin.setVisibility(View.GONE);
                         binding.timeCheckin.setVisibility(View.VISIBLE);
                     }
                 }
+
 
             }
 
@@ -146,12 +179,15 @@ public class HomeEmployeeFragment extends BaseFragment {
 
 
         binding.btnCheckin.setOnClickListener(view1 -> {
-            showProgressDialog(true);
-            addDataToFirebase(true);
+
+            showDialog(true);
+
             SharedUtils.saveBoolean(requireContext(), IS_CHECK_IN, true);
+            SharedUtils.saveBoolean(requireContext(), IS_CHECKOUT, false);
         });
         binding.btnCheckout.setOnClickListener(view12 -> {
-            showProgressDialog(true);
+            showDialog(false);
+
             SharedUtils.saveBoolean(requireContext(), IS_CHECKOUT, true);
             addDataToFirebase(false);
         });
@@ -167,66 +203,32 @@ public class HomeEmployeeFragment extends BaseFragment {
 
                 mFusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
                     Location location = task.getResult();
-                    if (location == null) {
-                        requestNewLocationData();
+                    System.out.println(location.getLatitude() + "--" + location.getLongitude());
+                    String locations = getCountry(location);
+
+                    if (Objects.equals(ipWifiHost, ipWifi) && locations.contains(localHost)) {
+                        wrong_address = true;
                     } else {
-                        String locations = getCountry(location);
-                        if (Objects.equals(ipWifiHost, ipWifi) && locations.contains(localHost)) {
-                            Toast.makeText(requireContext(), "Đúng giờ", Toast.LENGTH_SHORT).show();
-
-                        } else {
-
-                        }
-
+                        wrong_address = false;
                     }
+
                 });
             } else {
-                Toast.makeText(requireContext(), "Please turn on" + " your location...", Toast.LENGTH_LONG).show();
+
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivity(intent);
             }
         } else {
-            // if permissions aren't available,
-            // request for permissions
             requestPermissions();
         }
     }
 
-    @SuppressLint("MissingPermission")
-    private void requestNewLocationData() {
 
-        // Initializing LocationRequest
-        // object with appropriate methods
-        LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(5);
-        mLocationRequest.setFastestInterval(0);
-        mLocationRequest.setNumUpdates(1);
 
-        // setting LocationRequest
-        // on FusedLocationClient
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
-        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-    }
 
-    private LocationCallback mLocationCallback = new LocationCallback() {
-
-        @Override
-        public void onLocationResult(LocationResult locationResult) {
-            Location mLastLocation = locationResult.getLastLocation();
-            //latitudeTextView.setText("Latitude: " + mLastLocation.getLatitude() + "");
-            //longitTextView.setText("Longitude: " + mLastLocation.getLongitude() + "");
-        }
-    };
-
-    // method to check for permissions
     private boolean checkPermissions() {
-        return ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-
-        // If we want background location
-        // on Android 10.0 and higher,
-        // use:
-        // ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
+        return ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
     // method to request for permissions
@@ -270,16 +272,15 @@ public class HomeEmployeeFragment extends BaseFragment {
                 e.printStackTrace();
             }
         }
-        Toast.makeText(getActivity(), country_name, Toast.LENGTH_LONG).show();
+     //   Toast.makeText(getActivity(), country_name, Toast.LENGTH_LONG).show();
         return null;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (checkPermissions()) {
-            getLastLocation();
-        }
+        getLastLocation();
+
     }
 
     int status = 0;
@@ -287,8 +288,6 @@ public class HomeEmployeeFragment extends BaseFragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void addDataToFirebase(Boolean isCheckIn) {
-
-
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         DateTimeFormatter dtfTime = DateTimeFormatter.ofPattern("HH:mm");
         LocalDateTime now = LocalDateTime.now();
@@ -324,6 +323,7 @@ public class HomeEmployeeFragment extends BaseFragment {
         checkin.setTimeCheckIn(time2);
         checkin.setType(0);
         checkin.setStatus(status);
+        checkin.setWrongAddress(wrong_address);
 
 
         if (isCheckIn) {
@@ -368,6 +368,38 @@ public class HomeEmployeeFragment extends BaseFragment {
         }
 
         showProgressDialog(false);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void showDialog(Boolean isCheckin) {
+        Dialog dialog = new Dialog(requireContext());
+
+        dialog.setContentView(R.layout.activity_confirm_checkin);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        String txt = "";
+        if (isCheckin) {
+            txt = "Bạn có chắc chắc muốn check in?";
+        } else {
+            txt = "Bạn có chắc chắc muốn check out?";
+        }
+        TextView tv = dialog.findViewById(R.id.tv_confirm_checkin);
+        tv.setText(txt);
+        RelativeLayout btnOK, btnCancel;
+        btnOK =(RelativeLayout) dialog.findViewById(R.id.panel_checkin);
+        btnCancel =(RelativeLayout) dialog.findViewById(R.id.btnCancel);
+
+        btnOK.setOnClickListener(v -> {
+            showProgressDialog(true);
+            if (isCheckin){
+                addDataToFirebase(true);
+            }else {
+                addDataToFirebase(false);
+            }
+            dialog.dismiss();
+        });
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+        dialog.setCancelable(true);
+        dialog.show();
     }
 }
 

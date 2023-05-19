@@ -2,7 +2,6 @@
 <layout>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,7 +24,7 @@
                     android:id="@+id/avatar_admin"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:background="@drawable/haihuoc" />
+                    android:background="@drawable/avatar_user" />
 
                 <TextView
                     android:id="@+id/txt_admin"
@@ -39,6 +38,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/txtEmail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
@@ -51,6 +51,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rootInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp">
@@ -64,23 +65,29 @@
                 <TextView
                     android:id="@+id/txt_infoNV"
                     android:layout_width="290dp"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/line_1"
+                    android:layout_marginTop="20dp"
                     android:text="Thông tin cá nhân"
                     android:textColor="@color/black"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <ImageView
                     android:layout_width="40dp"
-                    android:layout_height="40dp"/>
+                    android:layout_height="40dp"
+                    android:layout_below="@id/line_1"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toRightOf="@id/txt_infoNV"
+                    android:background="@drawable/baseline_navigate_next_24" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/rootChangePass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp">
+                android:layout_marginTop="20dp">
 
                 <View
                     android:id="@+id/line"
@@ -91,19 +98,53 @@
                 <TextView
                     android:id="@+id/txt_changepw"
                     android:layout_width="290dp"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:text="Thay đổi mật khẩu"
                     android:textColor="@color/black"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_below="@id/line"
-                    android:layout_marginLeft="45dp"
-                    android:layout_toRightOf="@id/txt_changepw" />
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toRightOf="@id/txt_changepw"
+                    android:background="@drawable/baseline_navigate_next_24" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rootChangeIP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <View
+                    android:id="@+id/line5"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grey_a" />
+
+                <TextView
+                    android:id="@+id/txt_changepw1"
+                    android:layout_width="290dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Thay đổi thông tin công ty"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_below="@id/line5"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toRightOf="@id/txt_changepw1"
+                    android:background="@drawable/baseline_navigate_next_24" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -121,19 +162,21 @@
                 <TextView
                     android:id="@+id/txt_logout"
                     android:layout_width="290dp"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:text="Đăng xuất"
                     android:textColor="@color/black"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_below="@id/line1"
-                    android:layout_marginLeft="45dp"
-                    android:layout_toRightOf="@id/txt_logout" />
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toRightOf="@id/txt_logout"
+                    android:background="@drawable/baseline_navigate_next_24" />
             </RelativeLayout>
         </LinearLayout>
 

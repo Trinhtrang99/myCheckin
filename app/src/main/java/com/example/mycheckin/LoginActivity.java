@@ -9,12 +9,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import com.example.mycheckin.admin.MainAdmin;
+import com.example.mycheckin.admin.ManagerCheckin;
 import com.example.mycheckin.base.BaseActivity;
 import com.example.mycheckin.databinding.ActivityLoginBinding;
+import com.example.mycheckin.user.UserActivity;
 import com.example.mycheckin.utils.SharedUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -33,24 +34,36 @@ public class LoginActivity extends BaseActivity {
         auth = FirebaseAuth.getInstance();
         binding.btnLogin.setOnClickListener(v -> {
             showProgressDialog(true);
-            String email = "tai2@gmail.com";
-         //   String email = binding.txtPhone.getText().toString();
+            //String email = "tai@gmail.com";
+            String email = binding.txtPhone.getText().toString();
             final String password = "123456789";
-
-            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (!task.isSuccessful()) {
-                        Toast.makeText(LoginActivity.this, "Login failed." + task.getException(),
-                                Toast.LENGTH_SHORT).show();
-                    } else {
-                        SharedUtils.saveString(getBaseContext(), "EMAIL", email);
-                        startActivity(new Intent(LoginActivity.this, MainAdmin.class));
-                        finish();
+//            SharedUtils.saveString(getBaseContext(), "EMAIL", "admin@gmail.com");
+//            startActivity(new Intent(LoginActivity.this, MainAdmin.class));
+//            finish();
+            if (binding.txtPhone.getText().toString().equals("admin@gmail.com") && binding.txtPass.getText().toString().equals("123456789")) {
+                SharedUtils.saveString(getBaseContext(), "EMAIL", "admin@gmail.com");
+                startActivity(new Intent(LoginActivity.this, MainAdmin.class));
+                Toast.makeText(getApplicationContext(),"Đăng nhập thành công",Toast.LENGTH_SHORT).show();
+                finish();
+            }
+            else {
+                auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "Login failed." + task.getException(),
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            SharedUtils.saveString(getBaseContext(), "EMAIL", email);
+                            startActivity(new Intent(LoginActivity.this, UserActivity.class));
+                            Toast.makeText(getApplicationContext(),"Đăng nhập thành công",Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                        showProgressDialog(false);
                     }
-                    showProgressDialog(false);
-                }
-            });
+                });
+            }
+
 
         });
 

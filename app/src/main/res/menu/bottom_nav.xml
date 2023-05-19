@@ -4,15 +4,15 @@
     <item
         android:id="@+id/navigation_ai_scope"
         android:icon="@drawable/ic_baseline_supervisor_account_24"
-        android:title="" />
+        android:title="Nhân viên"/>
 
     <item
         android:id="@+id/navigation_inspection_results_top"
-        android:icon="@drawable/ic_manager"
-        android:title="" />
+        android:icon="@drawable/baseline_manage_history_24"
+        android:title="Chấm công" />
 
     <item
         android:id="@+id/navigation_diary"
         android:icon="@drawable/ic_baseline_person_2"
-        android:title="" />
+        android:title="Cá nhân" />
 </menu>

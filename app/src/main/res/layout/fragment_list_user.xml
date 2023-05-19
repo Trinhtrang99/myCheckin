@@ -16,10 +16,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:hint="QUẢN LÝ NHÂN VIÊN"
-                android:textColor="@color/black"
-                android:textSize="18dp"
-                android:textStyle="bold" />
+                android:text="@string/title_manage_user"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
         </RelativeLayout>
 
         <LinearLayout
@@ -30,21 +30,21 @@
             android:layout_marginRight="20dp">
 
             <RelativeLayout
-                android:layout_width="290dp"
+                android:layout_width="265dp"
                 android:layout_height="50dp"
                 android:background="@drawable/border_radius_10dp"
                 android:paddingLeft="20dp">
 
                 <EditText
-                    android:id="@+id/edtCardNumber"
+                    android:id="@+id/edtSearchEmp"
                     android:layout_width="match_parent"
-                    android:layout_height="57dp"
+                    android:layout_height="40dp"
                     android:layout_centerInParent="true"
                     android:layout_marginHorizontal="19dp"
                     android:layout_marginTop="4dp"
                     android:backgroundTint="@color/white"
-                    android:hint="Tìm kiếm nhân viên"
-                    android:inputType="numberPassword"
+                    android:hint="@string/search_feild"
+                    android:inputType="textAutoCorrect"
                     android:maxLength="19"
                     android:singleLine="true"
                     android:textColor="@color/black"
@@ -54,10 +54,10 @@
 
             <ImageButton
                 android:id="@+id/btnAdd"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center_vertical"
-                android:background="@drawable/add" />
+                android:background="@drawable/add_nv"/>
 
         </LinearLayout>
 

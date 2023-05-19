@@ -8,12 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.mycheckin.LoginActivity;
 import com.example.mycheckin.R;
 import com.example.mycheckin.base.BaseFragment;
 import com.example.mycheckin.databinding.FragmentFixEmployeeBinding;
@@ -35,20 +37,20 @@ public class FixEmployeeFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_fix_employee, container, false);
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        binding.edtNgaysinh.setOnClickListener(v -> {
-            DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(),
-                    (datePicker, year1, month1, day) -> {
-                        binding.edtNgaysinh.setText(day + "-" + (month1 + 1) + "-" + year1);
-                    }, year, month, dayOfMonth);
-            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
-            datePickerDialog.show();
-        });
+                Bundle savedInstanceState) {
+            binding = DataBindingUtil.inflate(inflater, R.layout.fragment_fix_employee, container, false);
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+            binding.edtNgaysinh.setOnClickListener(v -> {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(),
+                        (datePicker, year1, month1, day) -> {
+                            binding.edtNgaysinh.setText(day + "-" + (month1 + 1) + "-" + year1);
+                        }, year, month, dayOfMonth);
+                datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+                datePickerDialog.show();
+            });
 
         ArrayAdapter ad
                 = new ArrayAdapter(
@@ -94,6 +96,7 @@ public class FixEmployeeFragment extends BaseFragment {
                 }
 
                 showProgressDialog(false);
+
             }
 
             @Override
@@ -106,6 +109,7 @@ public class FixEmployeeFragment extends BaseFragment {
     }
 
     private void updateData() {
+        myRef.child("/name").setValue(binding.txtName.getText().toString());
         myRef.child("/birthday").setValue(binding.edtNgaysinh.getText().toString());
         myRef.child("/phone").setValue(binding.edtSdt.getText().toString());
         myRef.child("/position").setValue(binding.spinner1.getSelectedItem().toString());
