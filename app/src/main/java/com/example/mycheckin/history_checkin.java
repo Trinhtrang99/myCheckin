@@ -107,8 +107,8 @@ public class history_checkin extends BaseFragment {
                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                Checkin usersModel = snapshot.getValue(Checkin.class);
                                                if (snapshot.getValue() == null) {
-                                                   binding.txtCheckin.setText("unknown");
-                                                   binding.txtCheckout.setText("unknown");
+                                                   binding.txtCheckin.setText("--:--");
+                                                   binding.txtCheckout.setText("--:--");
                                                } else {
                                                    if (usersModel != null) {
                                                        binding.txtCheckin.setText(usersModel.getTimeCheckIn());

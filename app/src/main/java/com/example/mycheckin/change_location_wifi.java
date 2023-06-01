@@ -1,10 +1,12 @@
 package com.example.mycheckin;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.mycheckin.databinding.ActivityChangeLocationWifiBinding;
 import com.example.mycheckin.user.Commom;
@@ -58,6 +60,8 @@ public class change_location_wifi extends AppCompatActivity {
             myRef.child("/log").setValue(binding.edtLog.getText().toString());
             myRef.child("/address").setValue(binding.tvdetailLocation.getText().toString());
             myRef.child("/wifi_ip").setValue(WifiUtils.getWifiIpAddress());
+            Toast.makeText(change_location_wifi.this, "Cập nhật thông tin thành công ", Toast.LENGTH_SHORT).show();
+            finish();
         });
 
         binding.getRoot();

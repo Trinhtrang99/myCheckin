@@ -41,19 +41,25 @@
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="25dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/border_radius_10dp">
             <EditText
                 android:id="@+id/edtWifi"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:hint="Nhập địa chỉ ip wifi"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:layout_marginHorizontal="19dp"
+                android:layout_marginTop="4dp"
+                android:backgroundTint="@color/white"
+                android:hint="Nhập địa chỉ wifi"
+                android:inputType="phone"
+                android:maxLength="255"
+                android:singleLine="true"
                 android:textColor="@color/black"
-                android:textSize="16dp"
+                android:textFontWeight="400"
+                android:textSize="16sp"
                 tools:ignore="DuplicateIds" />
         </RelativeLayout>
         <RelativeLayout
@@ -72,7 +78,7 @@
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
@@ -81,10 +87,17 @@
                 android:id="@+id/edtlat"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginLeft="10dp"
+                android:layout_centerInParent="true"
+                android:layout_marginHorizontal="19dp"
+                android:layout_marginTop="4dp"
+                android:backgroundTint="@color/white"
                 android:hint="Nhập địa chỉ latitude"
+                android:inputType="phone"
+                android:maxLength="255"
+                android:singleLine="true"
                 android:textColor="@color/black"
-                android:textSize="16dp" />
+                android:textFontWeight="400"
+                android:textSize="16sp" />
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -102,7 +115,7 @@
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
@@ -111,10 +124,17 @@
                 android:id="@+id/edtLog"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginLeft="10dp"
+                android:layout_centerInParent="true"
+                android:layout_marginHorizontal="19dp"
+                android:layout_marginTop="4dp"
+                android:backgroundTint="@color/white"
                 android:hint="Nhập địa chỉ longtitude"
+                android:inputType="phone"
+                android:maxLength="255"
+                android:singleLine="true"
                 android:textColor="@color/black"
-                android:textSize="16dp"/>
+                android:textFontWeight="400"
+                android:textSize="16sp"/>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -123,17 +143,21 @@
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/border_radius_10dp">
-            <TextView
+            <EditText
                 android:id="@+id/tvdetailLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="Địa chỉ chi tiết"
-                android:textSize="16dp"
-                android:textColor="@color/black"/>
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:layout_marginHorizontal="19dp"
+                android:layout_marginTop="4dp"
+                android:backgroundTint="@color/white"
+                android:hint="Nhập địa chỉ longtitude"
+                android:inputType="text"
+                android:maxLength="255"
+                android:textColor="@color/black"
+                android:textFontWeight="400"
+                android:textSize="16sp"
+                android:text="Địa chỉ chi tiết"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -150,7 +174,7 @@
                 android:textAllCaps="true"
                 android:textSize="18dp"
                 android:textColor="@color/white"
-                android:background="#CD853F"
+                android:backgroundTint="#CD853F"
                 android:textFontWeight="700">
 
             </Button>

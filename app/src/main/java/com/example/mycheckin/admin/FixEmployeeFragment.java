@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentManager;
 import com.example.mycheckin.LoginActivity;
 import com.example.mycheckin.R;
 import com.example.mycheckin.base.BaseFragment;
+import com.example.mycheckin.change_location_wifi;
 import com.example.mycheckin.databinding.FragmentFixEmployeeBinding;
 import com.example.mycheckin.model.UsersModel;
 import com.google.firebase.database.DataSnapshot;
@@ -32,8 +33,8 @@ public class FixEmployeeFragment extends BaseFragment {
     private FragmentFixEmployeeBinding binding;
     DatabaseReference myRef;
     FirebaseDatabase database;
-    String[] courses = {"Kế toán ", "Nhân sự",
-            "Nhân viên"};
+    String[] courses = {"CEO", "CTO", "Developer", "Tester", "BA",
+            "Design", "Sale", "Maketing", "Kế toán", "PM", "HR", "Khác"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,9 +65,12 @@ public class FixEmployeeFragment extends BaseFragment {
         binding.btnUpdate.setOnClickListener(v -> {
             showProgressDialog(true);
             updateData();
+            Toast.makeText(getActivity(),"Cập nhật thông tin nhân viên thành công!",Toast.LENGTH_SHORT).show();
+
             showProgressDialog(false);
             FragmentManager fm = getFragmentManager();
             fm.popBackStack();
+
         });
         return binding.getRoot();
     }

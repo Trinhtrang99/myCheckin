@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
+import com.bumptech.glide.Glide;
 import com.example.mycheckin.AddUserFragment;
 import com.example.mycheckin.ButtomSheet;
 import com.example.mycheckin.R;
@@ -140,7 +142,7 @@ public class ListUserFragment extends BaseFragment implements ButtomSheet.IClick
                         newList.add(customersList);
                     }
                 }
-                adapter.updateList(newList);
+                adapter.updateList2(newList);
             }
 
             @Override
@@ -222,6 +224,7 @@ public class ListUserFragment extends BaseFragment implements ButtomSheet.IClick
     }
 
     TextView tvName, tvPhone, tvMail, tvPosition, tvBirthDay;
+    ImageView imvAvart;
 
     private void showDialogInfo(UsersModel user) {
         Dialog dialog = new Dialog(requireContext());
@@ -233,12 +236,20 @@ public class ListUserFragment extends BaseFragment implements ButtomSheet.IClick
         tvMail = dialog.findViewById(R.id.tv_email_detail);
         tvPosition = dialog.findViewById(R.id.tv_positon_detail);
         tvBirthDay = dialog.findViewById(R.id.tv_dob_detail);
+        imvAvart = dialog.findViewById(R.id.avatar_detail);
+
         tvName.setText(user.getName());
         tvMail.setText(user.getEmaul());
         tvPosition.setText(user.getPosition());
         tvBirthDay.setText(user.getBirthday());
         tvPhone.setText(user.getPhone());
 
+        if (user.getUrl() != null) {
+            Glide.with(requireContext())
+                    .load(user.getUrl())
+                    .centerCrop()
+                    .into(imvAvart);
+        }
         tvPhone.setOnClickListener(v -> {
             if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
 

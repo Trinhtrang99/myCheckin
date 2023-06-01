@@ -92,7 +92,7 @@
                         android:layout_height="60dp"
                         android:layout_below="@id/txt_forgot"
                         android:layout_marginTop="79dp"
-                        android:background="#CD853F"
+                        android:backgroundTint="#CD853F"
                         android:text="@string/btn_login"
                         android:textColor="@color/white"
                         android:textSize="18dp">

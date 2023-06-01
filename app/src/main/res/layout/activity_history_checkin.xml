@@ -56,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="Thứ 3, Ngày 03 - 01 - 2023"
+                    android:text="Thứ 5, Ngày 01 - 06 - 2023"
                     android:textColor="@color/black"
                     android:textSize="16dp"/>
 

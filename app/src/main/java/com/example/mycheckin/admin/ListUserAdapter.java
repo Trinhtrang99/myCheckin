@@ -60,6 +60,11 @@ public class ListUserAdapter extends RecyclerView.Adapter<ListUserAdapter.ListUs
     }
 
     public void updateList(List<User> userList) {
+        this.list.clear();
+        this.list = userList;
+        notifyDataSetChanged();
+    }
+    public void updateList2(List<User> userList) {
    //     this.list.clear();
         this.list = userList;
         notifyDataSetChanged();

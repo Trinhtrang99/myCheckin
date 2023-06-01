@@ -24,7 +24,7 @@
                     android:id="@+id/avatar_admin"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:background="@drawable/avatar_user" />
+                    android:background="@drawable/avatar_null" />
 
                 <TextView
                     android:id="@+id/txt_admin"

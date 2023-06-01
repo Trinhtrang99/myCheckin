@@ -12,7 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -20,26 +19,18 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.mycheckin.AddUserFragment;
 import com.example.mycheckin.DelayUtils;
-import com.example.mycheckin.HomeEmployeeFragment;
-import com.example.mycheckin.history_checkin;
 import com.example.mycheckin.R;
 import com.example.mycheckin.databinding.ActivityMainAdminBinding;
-import com.example.mycheckin.user.Commom;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 public class MainAdmin extends AppCompatActivity {
     ActivityMainAdminBinding binding;
@@ -57,12 +48,14 @@ public class MainAdmin extends AppCompatActivity {
     private String TAG = "  DATA FIREBASE";
     FirebaseDatabase database;
     DatabaseReference myRef;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void initFragment() {
         fragmentListUser = new ListUserFragment();
         fragmentManagerCheckin = new ManagerCheckin();
         profileFragment = new ProfileFragment();
     }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +95,6 @@ public class MainAdmin extends AppCompatActivity {
     }
 
 
-
     private void replaceFragment(Fragment fragment, String tag) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         if (currentPositon < page) {
@@ -118,7 +110,9 @@ public class MainAdmin extends AppCompatActivity {
         });
 
     }
+
     FusedLocationProviderClient mFusedLocationClient;
+
     @SuppressLint("MissingPermission")
     private void getLastLocation() {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -143,19 +137,23 @@ public class MainAdmin extends AppCompatActivity {
             requestPermissions();
         }
     }
+
     private boolean checkPermissions() {
         return ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
+
     private void requestPermissions() {
         ActivityCompat.requestPermissions(this, new String[]{
                 android.Manifest.permission.ACCESS_COARSE_LOCATION,
                 android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ID);
     }
+
     private boolean isLocationEnabled() {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
+
     private String getCountry(Location location) {
         String country_name = null;
         Geocoder geocoder = new Geocoder(this);

@@ -18,15 +18,12 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,17 +31,15 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 
+import com.bumptech.glide.Glide;
 import com.example.mycheckin.base.BaseFragment;
 import com.example.mycheckin.databinding.FragmentHomeEmployeeBinding;
 import com.example.mycheckin.model.Checkin;
-import com.example.mycheckin.model.Common;
+import com.example.mycheckin.model.UsersModel;
 import com.example.mycheckin.user.Commom;
 import com.example.mycheckin.utils.SharedUtils;
 import com.example.mycheckin.utils.WifiUtils;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -73,7 +68,8 @@ public class HomeEmployeeFragment extends BaseFragment {
     private FirebaseFirestore db;
     private String TAG = "  DATA FIREBASE";
     FirebaseDatabase database;
-    DatabaseReference myRef;
+    DatabaseReference myRef1;
+    DatabaseReference myRef3;
     DatabaseReference myRef2;
     String email = "";
     Date time;
@@ -100,12 +96,13 @@ public class HomeEmployeeFragment extends BaseFragment {
 
         email = SharedUtils.getString(requireContext(), EMAIL, "");
         database = FirebaseDatabase.getInstance();
-        myRef = database.getReference(USER);
+        myRef1 = database.getReference(USER);
         db = FirebaseFirestore.getInstance();
         time = new java.util.Date(System.currentTimeMillis());
         day = new SimpleDateFormat("dd-MM-yyyy").format(time);
         ipWifi = WifiUtils.getWifiIpAddress();
         myRef2 = database.getReference("commom");
+        myRef3 = database.getReference("commom");
 
         locationHost = new Location("");
         myRef2.addValueEventListener(new ValueEventListener() {
@@ -126,11 +123,36 @@ public class HomeEmployeeFragment extends BaseFragment {
             }
         });
 
+        myRef3 = database.getReference(USER).child(email.replace(".", ""));
+        myRef3.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UsersModel usersModel = snapshot.getValue(UsersModel.class);
+                if (usersModel != null) {
+                    binding.txt.setText(usersModel.getName());
+                    if (usersModel.getUrl() != null) {
+                        Glide.with(requireContext())
+                                .load(usersModel.getUrl())
+                                .centerCrop()
+                                .into(binding.avatarHome);
+                    }
+                }
 
 
 
+                showProgressDialog(false);
 
-        myRef.child(email.replace(".", "")).child(CHECK_IN).child(day).addValueEventListener(new ValueEventListener() {
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                showProgressDialog(false);
+
+            }
+        });
+
+
+        myRef1.child(email.replace(".", "")).child(CHECK_IN).child(day).addValueEventListener(new ValueEventListener() {
             @SuppressLint("SimpleDateFormat")
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -189,7 +211,7 @@ public class HomeEmployeeFragment extends BaseFragment {
             showDialog(false);
 
             SharedUtils.saveBoolean(requireContext(), IS_CHECKOUT, true);
-            addDataToFirebase(false);
+            addDataToFirebase1(false);
         });
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
 
@@ -222,8 +244,6 @@ public class HomeEmployeeFragment extends BaseFragment {
             requestPermissions();
         }
     }
-
-
 
 
     private boolean checkPermissions() {
@@ -272,7 +292,7 @@ public class HomeEmployeeFragment extends BaseFragment {
                 e.printStackTrace();
             }
         }
-     //   Toast.makeText(getActivity(), country_name, Toast.LENGTH_LONG).show();
+        //   Toast.makeText(getActivity(), country_name, Toast.LENGTH_LONG).show();
         return null;
     }
 
@@ -287,7 +307,7 @@ public class HomeEmployeeFragment extends BaseFragment {
     int type = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void addDataToFirebase(Boolean isCheckIn) {
+    private void addDataToFirebase1(Boolean isCheckIn) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         DateTimeFormatter dtfTime = DateTimeFormatter.ofPattern("HH:mm");
         LocalDateTime now = LocalDateTime.now();
@@ -331,7 +351,7 @@ public class HomeEmployeeFragment extends BaseFragment {
             binding.timeCheckin.setVisibility(View.GONE);
             binding.tvCheckin.setText(time2);
 
-            myRef.child(email.replace(".", ""))
+            myRef1.child(email.replace(".", ""))
                     .child(CHECK_IN).child(day).setValue(checkin)
                     .addOnFailureListener(e -> System.out.println("FAIL"))
                     .addOnCompleteListener(task -> System.out.println("dONE"));
@@ -353,9 +373,9 @@ public class HomeEmployeeFragment extends BaseFragment {
                     }
                 }
                 String link = "/" + email.replace(".", "") + "/checkIn/" + day;
-                myRef.child(link + "/timeCheckout").setValue(time2);
-                myRef.child(link + "/type").setValue(type);
-                myRef.child(link + "/status").setValue(status);
+                myRef1.child(link + "/timeCheckout").setValue(time2);
+                myRef1.child(link + "/type").setValue(type);
+                myRef1.child(link + "/status").setValue(status);
 
             } catch (ParseException e) {
                 throw new RuntimeException(e);
@@ -385,15 +405,15 @@ public class HomeEmployeeFragment extends BaseFragment {
         TextView tv = dialog.findViewById(R.id.tv_confirm_checkin);
         tv.setText(txt);
         RelativeLayout btnOK, btnCancel;
-        btnOK =(RelativeLayout) dialog.findViewById(R.id.panel_checkin);
-        btnCancel =(RelativeLayout) dialog.findViewById(R.id.btnCancel);
+        btnOK = (RelativeLayout) dialog.findViewById(R.id.panel_checkin);
+        btnCancel = (RelativeLayout) dialog.findViewById(R.id.btnCancel);
 
         btnOK.setOnClickListener(v -> {
             showProgressDialog(true);
-            if (isCheckin){
-                addDataToFirebase(true);
-            }else {
-                addDataToFirebase(false);
+            if (isCheckin) {
+                addDataToFirebase1(true);
+            } else {
+                addDataToFirebase1(false);
             }
             dialog.dismiss();
         });

@@ -48,6 +48,7 @@ public class update_user extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_update_user);
+
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
@@ -65,6 +66,7 @@ public class update_user extends BaseActivity {
                     binding.txtEmail.setText(usersModel.getEmaul());
                     binding.edtNgaysinh.setText(usersModel.getBirthday());
                     binding.edtSdt.setText(usersModel.getPhone());
+                    binding.textPossition.setText(usersModel.getPosition());
                     if (usersModel.getUrl()!=null){
                         Glide.with(update_user.this)
                                 .load(usersModel.getUrl())

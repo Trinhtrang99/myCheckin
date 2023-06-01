@@ -50,6 +50,13 @@ public class ListnVActivity extends BaseActivity implements ListUserAdapter.iCli
         Intent intent = getIntent();
         message = intent.getIntExtra("key", 0);
         date = intent.getStringExtra("date");
+        if (message == 0){
+            binding.txtTitle.setText("Danh sách nhân viên đi làm muộn");
+        }else if (message == 1){
+            binding.txtTitle.setText("Danh sách nhân viên vi phạm sai địa chỉ");
+        }else {
+            binding.txtTitle.setText("Danh sách nhân viên chấm công");
+        }
         adapter = new ListUserAdapter(list, this, this);
         binding.rc.setAdapter(adapter);
         getData(date);
@@ -72,26 +79,26 @@ public class ListnVActivity extends BaseActivity implements ListUserAdapter.iCli
 
                 for (String i : list1) {
                     Checkin checkin = snapshot.child(i).child("checkIn").child(data).getValue(Checkin.class);
-                    String url ;
-                    if (snapshot.child(i).child("url").getValue().toString()!=null){
+                    String url;
+                    if (snapshot.child(i).child("url").getValue() != null) {
                         url = snapshot.child(i).child("url").getValue().toString();
-                    }else {
+                    } else {
                         url = null;
                     }
                     if (checkin != null) {
                         if (checkin.getStatus() == 1) {
-                            listNameLate.add(new User(snapshot.child(i).child("name").getValue().toString(),i,url));
+                            listNameLate.add(new User(snapshot.child(i).child("name").getValue().toString(), i, url));
                         }
                         if (!checkin.isWrongAddress()) {
-                            listNameWrongAddress.add(new User(snapshot.child(i).child("name").getValue().toString(),i,url));
+                            listNameWrongAddress.add(new User(snapshot.child(i).child("name").getValue().toString(), i, url));
                         }
                         if (checkin.getStatus() != 1 && checkin.isWrongAddress()) {
-                            listCheckin.add(new User(snapshot.child(i).child("name").getValue().toString(),i,url));
+                            listCheckin.add(new User(snapshot.child(i).child("name").getValue().toString(), i, url));
                         }
 
 
                     } else {
-                        listCheckin.add(new User(snapshot.child(i).child("name").getValue().toString(),i,url));
+                        listCheckin.add(new User(snapshot.child(i).child("name").getValue().toString(), i, url));
                     }
                 }
                 switch (message) {
@@ -161,6 +168,7 @@ public class ListnVActivity extends BaseActivity implements ListUserAdapter.iCli
         dialog.setCancelable(true);
         dialog.show();
     }
+
     private void getInfoUser(String name) {
         myRef.child(name).addValueEventListener(new ValueEventListener() {
             @Override

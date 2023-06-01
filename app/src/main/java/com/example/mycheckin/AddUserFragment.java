@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,8 +44,8 @@ public class AddUserFragment extends BaseFragment {
         // Required empty public constructor
     }
 
-    String[] courses = {"Kế toán ", "Nhân sự",
-            "Nhân viên"};
+    String[] courses = {"CEO", "CTO", "Developer", "Tester", "BA", "Design",
+            "Sale", "Maketing", "Kế toán", "PM", "HR", "Khác"};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,6 +104,8 @@ public class AddUserFragment extends BaseFragment {
                         System.out.println("fail" + e.getCause());
                     });
             showProgressDialog(true);
+            Toast.makeText(getActivity(),"Thêm nhân viên thành công!",Toast.LENGTH_SHORT).show();
+
             FragmentManager fm = getFragmentManager();
             fm.popBackStack();
         });
@@ -124,6 +127,7 @@ public class AddUserFragment extends BaseFragment {
         //   user.setCheckin(new Checkin());
         String email = binding.edtHolderName.getText().toString().replace(".", "");
         myRef.child(email).setValue(user).addOnCompleteListener(task -> {
+
                     System.out.println("Thêm nhân viên thành công");
                 })
                 .addOnFailureListener(e -> {
