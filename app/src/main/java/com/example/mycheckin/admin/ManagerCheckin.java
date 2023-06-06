@@ -15,6 +15,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.example.mycheckin.R;
+import com.example.mycheckin.ReportActivity2;
 import com.example.mycheckin.chart.PieHelper;
 import com.example.mycheckin.chart.PieView;
 import com.example.mycheckin.databinding.FragmentManagerCheckinBinding;
@@ -35,6 +36,8 @@ public class ManagerCheckin extends Fragment {
 
     FragmentManagerCheckinBinding binding;
     String date;
+    int monthSelect ;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +48,12 @@ public class ManagerCheckin extends Fragment {
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_manager_checkin, container, false);
         // set(binding.pieView);
+        monthSelect = 6;
+        binding.btnReport.setOnClickListener(v -> {
+            Intent i = new Intent(requireContext(), ReportActivity2.class);
+            i.putExtra("MONTH", monthSelect);
+            startActivity(i);
+        });
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference(USER);
         binding.calendar.setMaxDate(System.currentTimeMillis() + (1000 * 60 * 60 * 24));
@@ -67,6 +76,7 @@ public class ManagerCheckin extends Fragment {
         }
 
         getData(date);
+
         binding.calendar.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             String date1;
             String monthTemp = "";
@@ -81,12 +91,13 @@ public class ManagerCheckin extends Fragment {
             } else {
                 dateTemp1 = "0" + dayOfMonth;
             }
-
+            monthSelect = month + 1;
             date = dateTemp1 + "-" + monthTemp + "-" + year;
 
 
             getData(date);
         });
+     //   binding.calendar.setOnMonthChangedListener
         //binding.pieView.selectedPie(3);
 
         binding.pieView.setOnPieClickListener(index -> {

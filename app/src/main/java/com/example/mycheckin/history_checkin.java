@@ -4,8 +4,10 @@ import static com.example.mycheckin.model.Common.CHECK_IN;
 import static com.example.mycheckin.model.Common.EMAIL;
 import static com.example.mycheckin.model.Common.USER;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -39,6 +42,8 @@ public class history_checkin extends BaseFragment {
     Date time;
     String day;
     String email;
+    int times = 0;
+    int monthSelect = 6;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,15 +58,13 @@ public class history_checkin extends BaseFragment {
         myRef = database.getReference(USER);
         binding.calendar.setMaxDate(System.currentTimeMillis() + (1000 * 60 * 60 * 24));
         binding.calendar.stopNestedScroll();
-        Calendar c = Calendar.getInstance();
-        int day1 = c.get(Calendar.DAY_OF_MONTH);
-        int month1 = c.get(Calendar.MONTH);
-        int year1 = c.get(Calendar.YEAR);
+        times = 0;
         getData(day);
-
-
+        getDataMonth();
+        scrollToBottom();
         Calendar calendar = Calendar.getInstance();
         binding.calendar.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+            monthSelect = month + 1;
             LocalDate ld2 = null;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 ld2 = LocalDate.of(year, month + 1, dayOfMonth);
@@ -82,7 +85,7 @@ public class history_checkin extends BaseFragment {
                 getData(date1);
             }
 
-
+            getDataMonth();
         });
         return binding.getRoot();
     }
@@ -145,4 +148,62 @@ public class history_checkin extends BaseFragment {
         dialog.show();
     }
 
+    String mess1 = "";
+    String mess2 = "";
+
+    private void getDataMonth() {
+        mess1 = "Số lần đi muộn trong tháng " + monthSelect + " : ";
+        YearMonth yearMonthObject = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            yearMonthObject = YearMonth.of(2023, monthSelect);
+            int daysInMonth = yearMonthObject.lengthOfMonth();
+
+            String day;
+            String month;
+            if (monthSelect < 10) {
+                month = "0" + monthSelect;
+            } else {
+                month = monthSelect + "";
+            }
+            for (int i = 1; i <= daysInMonth; i++) {
+                if (i < 10) {
+                    day = "0" + i;
+                } else {
+                    day = i + "";
+                }
+                String time = day + "-" + month + "-2023";
+                myRef.child(email.replace(".", "")).child(CHECK_IN).child(time).addValueEventListener(new ValueEventListener() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Checkin usersModel = snapshot.getValue(Checkin.class);
+                        if (usersModel != null) {
+                            if (usersModel.getStatus() == 1) {
+                                times++;
+                                mess2 += "\n" + time + " checkIn : " + usersModel.getTimeCheckIn() + " ,Checkout " + usersModel.getTimeCheckout() + "\n";
+                                binding.tvLateNumber.setText(mess1 + times + mess2);
+
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+        }
+
+
+        Log.d("SO lam", "" + times);
+    }
+
+    private void scrollToBottom() {
+        binding.SCROLLERID.post(new Runnable() {
+            public void run() {
+                binding.SCROLLERID.smoothScrollTo(0, binding.tvLateNumber.getBottom());
+            }
+        });
+    }
 }

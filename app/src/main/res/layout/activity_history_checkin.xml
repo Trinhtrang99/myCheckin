@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:expandableTextView="http://schemas.android.com/apk/res-auto">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -45,7 +46,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:background="#F3F3F3">
@@ -58,7 +59,7 @@
                     android:layout_marginTop="10dp"
                     android:text="Thứ 5, Ngày 01 - 06 - 2023"
                     android:textColor="@color/black"
-                    android:textSize="16dp"/>
+                    android:textSize="16dp" />
 
                 <TextView
                     android:id="@+id/tvcheckin"
@@ -70,7 +71,7 @@
                     android:text="Check in"
                     android:textColor="@color/black"
                     android:textSize="16dp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -82,7 +83,7 @@
                     android:text="Check out"
                     android:textColor="@color/black"
                     android:textSize="16dp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:id="@+id/panel"
@@ -93,14 +94,15 @@
                     android:layout_marginTop="10dp"
                     android:background="@color/orgain"
                     android:gravity="center">
+
                     <TextView
                         android:id="@+id/txtCheckin"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:gravity="center"
                         android:text="08:00"
                         android:textColor="@color/white"
-                        android:textSize="16dp"
-                        android:gravity="center"/>
+                        android:textSize="16dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -121,6 +123,28 @@
                         android:textColor="@color/white"
                         android:textSize="16dp" />
                 </LinearLayout>
+
+                <ScrollView
+                    android:layout_margin="16dp"
+                    android:layout_below="@id/panel"
+                    android:id="@+id/SCROLLER_ID"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="vertical"
+                    android:fillViewport="true">
+                    <io.github.glailton.expandabletextview.ExpandableTextView
+                        android:layout_weight="1.0"
+                        android:id="@+id/tvLateNumber"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        expandableTextView:collapsedLines="2"
+                        expandableTextView:animDuration="500"
+                        expandableTextView:readMoreText="Xem thêm"
+                        expandableTextView:readLessText="it hơn"
+                        expandableTextView:textMode="line"
+                        expandableTextView:isExpanded="true" />
+                </ScrollView>
+
             </RelativeLayout>
 
         </LinearLayout>
